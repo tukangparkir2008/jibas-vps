@@ -1,0 +1,41 @@
+version: '3'
+
+networks:
+  bridge:
+
+volumes:
+  mysql_db: {}
+  logs: {}
+
+services:
+  jibasapp:
+    image: php56-jibas:latest
+    build:
+      context: ./images/php
+    volumes:
+      - "./app:/app"
+      - "./etc/php/www.conf:/usr/local/etc/php-fpm.d/www.conf"
+    networks:
+      - bridge
+  
+
+  nginx:
+    image: nginx:1.21.6
+    volumes:
+      - "./app:/app"
+      - "./etc/nginx:/etc/nginx/conf.d"
+    networks:
+      - bridge
+    ports:
+      - 8080:80
+
+  mysql:
+    image: mariadb
+    volumes:
+      - "mysql_db:/var/lib/mysql"
+      - "./app:/app"
+    environment:
+      - MARIADB_ROOT_PASSWORD=kebersamaan
+      - MARIADB_DATABASE=jbsakad
+    networks:
+      - bridge
