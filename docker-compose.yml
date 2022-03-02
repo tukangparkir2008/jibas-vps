@@ -17,7 +17,8 @@ services:
       - "./etc/php/www.conf:/usr/local/etc/php-fpm.d/www.conf"
     networks:
       - bridge
-  
+    env_file:
+      - .env
 
   nginx:
     image: nginx:1.21.6
@@ -26,16 +27,20 @@ services:
       - "./etc/nginx:/etc/nginx/conf.d"
     networks:
       - bridge
+    env_file:
+      - .env
     ports:
-      - 8080:80
+      - ${HTTP_PORT}:80
 
   mysql:
-    image: mariadb
+    image: mariadb:10.8.2
     volumes:
       - "mysql_db:/var/lib/mysql"
-      - "./app:/app"
+    env_file:
+      - .env
     environment:
-      - MARIADB_ROOT_PASSWORD=kebersamaan
-      - MARIADB_DATABASE=jbsakad
+      - MARIADB_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
     networks:
       - bridge
+    ports:
+      - ${DB_PORT}:3306

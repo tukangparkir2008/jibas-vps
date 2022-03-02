@@ -5,9 +5,12 @@ Running JIBAS using docker-compose
 - Docker with docker-compose
 
 ## Instalasi:
-1. Download [JIBAS Education Commonity](http://www.jibas.net/content/download/download.php)
-2. Extract ke dalam direktori ./app
-3. Jalankan database: `docker-compose up -d mysql`
-4. Import file SQL
-5. Jalankan aplikasi: `docker-compose up nginx jibasapp`
-6. Buka di browser ke: http://localhost:8080/jibas/
+1. Clone repository ini `git clone https://github.com/ivanp/jibas-dockercompose.git`
+2. Masuk ke direktori `cd jibas-dockercompose`
+3. Copy file .env-example ke .env
+4. Jalankan MariaDB server `docker-compose up mysql`
+5. Buka terminal baru jalakan script instalasi `docker-compose run --rm jibasapp make install`
+
+## Menjalankan
+1. `docker-compose up`
+2. Buka di browser http://localhost:3001/jibas/
