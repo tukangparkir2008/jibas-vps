@@ -1,10 +1,10 @@
 SHELL:=/bin/bash
 
 app_dir=/app
-jibas_url=http://www.jibas.net/res/jibas/jibas.education.community.src-26.0.7z
-jibas_dir=jibas.education.community-26.0
+jibas_url=https://jibas.id/res/jibas/jibas.src-32.0.7z
+jibas_dir=jibas-32.0
 tmp_dir=/tmp/jibas
-archive_file=$(tmp_dir)/jibas.7z
+archive_file=$(tmp_dir)/jibas.src-32.0.7z
 sql_file=$(app_dir)/jibas_db.sql
 config_file=$(app_dir)/jibas/include/database.config.php
 
@@ -15,7 +15,7 @@ runsql:
 download-jibas:
 	mkdir -p $(tmp_dir)
 ifeq ("$(wildcard $(archive_file))","")
-	wget -O $(archive_file) $(jibas_url)
+	wget --no-check-certificate -O $(archive_file) $(jibas_url)
 endif
 	7z x -y -o$(tmp_dir) $(archive_file)
 	cp -r $(tmp_dir)/$(jibas_dir)/* /app
