@@ -1,4 +1,4 @@
-version: '3'
+version: '3' # Atribut ini bisa dihapus jika Docker Compose versi terbaru
 
 networks:
   bridge:
@@ -9,33 +9,37 @@ volumes:
 
 services:
   jibasapp:
-    image: php83-jibas:latest # Nama image diubah untuk mencerminkan versi PHP
+    image: php83-jibas:latest
     build:
       context: ./images/php
     volumes:
       - "./app:/app"
-      - "./etc/php/www.conf:/usr/local/etc/php-fpm.d/www.conf" # Pastikan file www.conf ini kompatibel atau sesuaikan jika perlu
+      - "./etc/php/www.conf:/usr/local/etc/php-fpm.d/www.conf"
     networks:
       - bridge
     env_file:
       - .env
 
   nginx:
-    image: nginx:1.21.6 # Anda mungkin perlu mempertimbangkan untuk memperbarui Nginx juga di masa mendatang
+    image: nginx:1.21.6
     volumes:
       - "./app:/app"
-      - "./etc/nginx:/etc/nginx/conf.d"
+      - "./etc/nginx:/etc/nginx/conf.d" # Pastikan file konfigurasi Nginx Anda (misal: default.conf) ada di sini
     networks:
       - bridge
     env_file:
       - .env
     ports:
-      - ${HTTP_PORT}:80
+      - "${HTTP_PORT}:80"
 
-  mysql:
-    image: mariadb:11 # Versi MariaDB diperbarui
+  mysql: # Layanan MariaDB
+    image: mariadb:11
     volumes:
       - "mysql_db:/var/lib/mysql"
+      # Tambahkan baris berikut untuk me-mount file konfigurasi kustom MariaDB
+      # Pastikan Anda membuat direktori ./etc/mysql/conf.d/
+      # dan meletakkan custom-mariadb.cnf di dalamnya.
+      - "./etc/mysql/conf.d:/etc/mysql/conf.d"
     env_file:
       - .env
     environment:
@@ -43,4 +47,5 @@ services:
     networks:
       - bridge
     ports:
-      - ${DB_PORT}:3306
+      # Baris ini sudah benar untuk memetakan DB_PORT di host ke port 3306 di kontainer
+      - "${DB_PORT}:3306"
